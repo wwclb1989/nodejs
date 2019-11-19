@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>模块化开发演变-对象命名空间</title>
+</head>
+<body>
+
+<input type="text" id="x">
+<select name="" id="opt">
+    <option value="0">+</option>
+    <option value="1">-</option>
+    <option value="2">*</option>
+    <option value="3">/</option>
+</select>
+<input type="text" id="y">
+<button id="cal">=</button>
+<input type="text" id="result">
+<script>
+
+    var calculator = {}
+
+    calculator.add = function add(x, y) {
+        return parseInt(x) + parseInt(y);
+    };
+
+    calculator.subtract = function subtract(x, y) {
+        return parseInt(x) - parseInt(y);
+    };
+
+    calculator.multiply = function multiply(x, y) {
+        return parseInt(x) * parseInt(y);
+    };
+
+    calculator.divide = function divide(x, y) {
+        return parseInt(x) / parseInt(y);
+    };
+
+    // 获取所有的DOM元素
+    var oX = document.getElementById('x');
+    var oY = document.getElementById('y');
+    var oOpt = document.getElementById('opt');
+    var oCal = document.getElementById('cal');
+    var oResult = document.getElementById('result');
+
+    // 为等号按钮添加单击事件，当按钮被点击时调用此方法
+    oCal.addEventListener('click', function () {
+        var x = oX.value.trim();
+        var y = oY.value.trim();
+        var opt = oOpt.value;
+        var result = 0;
+        switch (opt) {
+            case '0':
+                result = calculator.add(x, y);
+                break;
+            case '1':
+                result = calculator.subtract(x, y);
+                break;
+            case '2':
+                result = calculator.multiply(x, y);
+                break;
+            case '3':
+                result = calculator.divide(x, y);
+                break;
+        }
+        oResult.value = result;
+    });
+
+    /**
+     *     在上述代码中，从代码层面可以知道哪些函数属于同一个模块，用于计算的4个函
+     * 数的命名冲突问题也解决了，但是如果再定义一个名称为calculator的命名空间还是会报
+     * 错。由此可见，只是从理论意义上减少了命名冲突的问题，但是命名冲突还是存在，而且
+     * 这种方式是内部成员的状态可以随意被外部改写，不安全。
+     */
+</script>
+</body>
+</html>

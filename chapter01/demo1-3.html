@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>模块化开发演变-函数的作用域（闭包）</title>
+</head>
+<body>
+
+<input type="text" id="x">
+<select name="" id="opt">
+    <option value="0">+</option>
+    <option value="1">-</option>
+    <option value="2">*</option>
+    <option value="3">/</option>
+</select>
+<input type="text" id="y">
+<button id="cal">=</button>
+<input type="text" id="result">
+<script>
+
+    var calculator = (function() {
+        function add(x, y) {
+            return parseInt(x) + parseInt(y);
+        }
+
+        function subtract(x, y) {
+            return parseInt(x) - parseInt(y);
+        }
+
+        function multiply(x, y) {
+            return parseInt(x) * parseInt(y);
+        }
+
+        function divide(x, y) {
+            return parseInt(x) / parseInt(y);
+        }
+
+        return {
+            add: add,
+            subtract: subtract,
+            multiply: multiply,
+            divide: divide
+        }
+    })();
+
+    // 获取所有的DOM元素
+    var oX = document.getElementById('x');
+    var oY = document.getElementById('y');
+    var oOpt = document.getElementById('opt');
+    var oCal = document.getElementById('cal');
+    var oResult = document.getElementById('result');
+
+    // 为等号按钮添加单击事件，当按钮被点击时调用此方法
+    oCal.addEventListener('click', function () {
+        var x = oX.value.trim();
+        var y = oY.value.trim();
+        var opt = oOpt.value;
+        var result = 0;
+        switch (opt) {
+            case '0':
+                result = calculator.add(x, y);
+                break;
+            case '1':
+                result = calculator.subtract(x, y);
+                break;
+            case '2':
+                result = calculator.multiply(x, y);
+                break;
+            case '3':
+                result = calculator.divide(x, y);
+                break;
+        }
+        oResult.value = result;
+    });
+
+    /**
+     *     在上述代码中，用于计算的4个方法被封装到了立即执行匿名函数中，如果不添加
+     * 返回值，外部是访问不到的，添加返回值后，在全局可以通过“匿名函数.函数名()”的
+     * 方式进行调用。这样有效地公开了公有方法，并且可以隐藏一些私有属性和元素，私有
+     * 空间的函数和变量也不会影响全局作用域，可见这种方式是最理想的方式。大部分第三
+     * 方库都使用这种形式，例如jQuery
+     */
+</script>
+</body>
+</html>

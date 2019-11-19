@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>模块化开发演变-维护和扩展</title>
+</head>
+<body>
+
+<input type="text" id="x">
+<select name="" id="opt">
+    <option value="0">+</option>
+    <option value="1">-</option>
+    <option value="2">*</option>
+    <option value="3">/</option>
+    <option value="4">%</option>
+</select>
+<input type="text" id="y">
+<button id="cal">=</button>
+<input type="text" id="result">
+<script>
+
+    var calculator = (function(cal) {
+        function add(x, y) {
+            return parseInt(x) + parseInt(y);
+        }
+
+        function subtract(x, y) {
+            return parseInt(x) - parseInt(y);
+        }
+
+        function multiply(x, y) {
+            return parseInt(x) * parseInt(y);
+        }
+
+        function divide(x, y) {
+            return parseInt(x) / parseInt(y);
+        }
+        cal.add = add;
+        cal.subtract = subtract;
+        cal.multiply = multiply;
+        cal.divide = divide;
+        return cal;
+
+    })(calculator || {});
+
+    var calculator = (function (cal) {
+        // 取余方法
+        cal.mod = function (x, y) {
+            return x % y;
+        }
+
+        return cal;
+    })(calculator || {});
+
+
+    // 获取所有的DOM元素
+    var oX = document.getElementById('x');
+    var oY = document.getElementById('y');
+    var oOpt = document.getElementById('opt');
+    var oCal = document.getElementById('cal');
+    var oResult = document.getElementById('result');
+
+    // 为等号按钮添加单击事件，当按钮被点击时调用此方法
+    oCal.addEventListener('click', function () {
+        var x = oX.value.trim();
+        var y = oY.value.trim();
+        var opt = oOpt.value;
+        var result = 0;
+        switch (opt) {
+            case '0':
+                result = calculator.add(x, y);
+                break;
+            case '1':
+                result = calculator.subtract(x, y);
+                break;
+            case '2':
+                result = calculator.multiply(x, y);
+                break;
+            case '3':
+                result = calculator.divide(x, y);
+                break;
+            case '4':
+                result = calculator.mod(x, y);
+        }
+        oResult.value = result;
+    });
+
+    /**
+     *     上述代码中，第22行在用于计算的匿名函数中传递cal作为参数，该参数可以看
+     * 作匿名函数本身，第44行代码“calculator || {}”的意思是，当扩展该模块时，判断
+     * calculator函数是否存在，如果存在使用已存在的，如果不存在就重新创建，这样做的好
+     * 处是在加载时不需要考虑顺序。第46-53行用于添加取余的方法。
+     */
+</script>
+</body>
+</html>
